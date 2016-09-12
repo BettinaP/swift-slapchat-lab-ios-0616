@@ -13,7 +13,7 @@ class DataStore {
     
 
     static let sharedDataStore =  DataStore()
-    
+    var messages = [Message]()
     
     // MARK: - Core Data Saving support
     
@@ -31,10 +31,20 @@ class DataStore {
         }
     }
     
-//        func fetchData ()
-//        {
-//         perform a fetch request to fill an array property on your datastore
-//        }
+    func fetchData() {  //perform a fetch request to fill an array property on your datastore
+        
+    let messageFetch = NSFetchRequest(entityName: Message.entityName)
+        
+        do{
+        
+            self.messages = try self.managedObjectContext.executeFetchRequest(messageFetch) as! [Message]
+        
+        }catch {
+            
+            fatalError("fetch didn't work")
+        }
+    
+    }
 
     // MARK: - Core Data stack
     // Managed Object Context property getter. This is where we've dropped our "boilerplate" code.
@@ -50,7 +60,7 @@ class DataStore {
     
     lazy var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = NSBundle.mainBundle().URLForResource("<#XCDATAMODELD_NAME#>", withExtension: "momd")!
+        let modelURL = NSBundle.mainBundle().URLForResource("SlapChatModel", withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
     
